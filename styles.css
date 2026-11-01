@@ -206,6 +206,9 @@ h1 { margin-bottom: 3px; font-family: var(--font-display); font-size: 48px; line
 .insufficient { margin-top: 9px !important; color: var(--tomato-dark) !important; font-size: 11px !important; }
 
 .album-heading { margin-bottom: 20px; }
+.album-heading #album-summary { display: grid; max-width: 34ch; gap: 3px; margin: 8px 0 0; padding: 8px 10px; border-left: 3px solid var(--mint-dark); border-radius: 3px; background: #e9f1e7; color: var(--ink); line-height: 1.4; }
+.album-summary-main { font-size: 13px; font-weight: 900; }
+.album-summary-total { color: var(--ink-soft); font-size: 10px; font-weight: 800; }
 .album-progress { width: 155px; padding-bottom: 4px; text-align: right; }
 .album-progress span { display: block; margin-bottom: 7px; font-family: var(--font-display); font-size: 25px; }
 .progress-track { height: 7px; overflow: hidden; border-radius: 9px; background: #dfe5db; }
@@ -229,7 +232,8 @@ h1 { margin-bottom: 3px; font-family: var(--font-display); font-size: 48px; line
 .food-card.rarity-comun::before { background: #c9ead8; }
 .food-card.rarity-rara::before { background: #c5e0f2; }
 .food-card.rarity-ultra::before { background: #f3c6de; }
-.food-card.is-locked { background: #e8ece3; box-shadow: 3px 4px 0 #73857a; }
+.food-card.is-locked { border-color: #87988d; border-style: dashed; background: #e8ece3; box-shadow: 3px 4px 0 #73857a; }
+.food-card.is-locked .food-art { border-color: #9aab9e; background-color: #e4e9e1; background-image: none; }
 .food-card.rarity-ultra:not(.is-locked)::after {
   position: absolute;
   z-index: 3;
@@ -248,7 +252,9 @@ h1 { margin-bottom: 3px; font-family: var(--font-display); font-size: 48px; line
 .food-card-header { display: flex; align-items: center; justify-content: space-between; gap: 5px; padding: 9px 10px 0; }
 .rarity-label { display: inline-flex; align-items: center; gap: 5px; color: var(--ink-soft); font-size: 8px; font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase; }
 .rarity-label .rarity-dot { width: 7px; }
-.card-quantity { color: var(--ink-soft); font-size: 10px; font-weight: 900; }
+.card-quantity { display: inline-flex; min-width: 32px; min-height: 24px; align-items: center; justify-content: center; padding: 2px 6px; border: 1px solid var(--line); border-radius: 999px; background: #f0f3ea; color: var(--ink-soft); font-size: 10px; font-weight: 900; line-height: 1; }
+.card-quantity[data-quantity-tier="multiple"] { border-color: var(--tomato-dark); background: var(--lemon); color: var(--ink); font-size: 11px; }
+.food-card.is-locked .card-quantity { border-color: transparent; background: transparent; }
 .food-art { display: grid; min-height: 133px; margin: 8px 9px 0; place-items: center; overflow: hidden; border: 1px dashed #b6c8b9; border-radius: 4px; background-color: #f5f1df; background-image: radial-gradient(#d5d7bc 0.7px, transparent 0.7px); background-size: 10px 10px; }
 .food-mark { font-size: 61px; line-height: 1; filter: drop-shadow(2px 3px 0 rgb(25 59 53 / 14%)); }
 .food-art img { width: 100%; height: 100%; max-height: 155px; object-fit: cover; }
@@ -272,7 +278,8 @@ h1 { margin-bottom: 3px; font-family: var(--font-display); font-size: 48px; line
   .shop-layout { grid-template-columns: 145px 1fr; gap: 24px; }
   .pack-illustration { width: 140px; }
   .album-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .album-toolbar { align-items: flex-start; flex-direction: column; }
+  .album-toolbar { align-items: stretch; flex-direction: column; }
+  .filter-list { width: 100%; }
 }
 
 @media (max-width: 620px) {
@@ -307,13 +314,30 @@ h1 { margin-bottom: 3px; font-family: var(--font-display); font-size: 48px; line
   .odds-row { grid-template-columns: 8px 1fr; gap: 4px; font-size: 9px; }
   .odds-row strong { grid-column: 2; font-size: 13px; }
   .daily-special { margin-top: 15px; }
-  .album-progress { width: 90px; }
-  .album-progress span { font-size: 21px; }
-  .filter-list { gap: 3px; }
-  .filter-button { min-height: 44px; padding: 6px 8px; font-size: 9px; }
-  .album-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-  .food-art { min-height: 116px; }
-  .food-mark { font-size: 52px; }
+  .album-heading { align-items: stretch; flex-direction: column; gap: 12px; }
+  .album-progress { display: flex; width: 100%; flex: 0 0 auto; align-items: center; gap: 10px; padding: 0; text-align: left; }
+  .album-progress span { min-width: 42px; margin: 0; font-size: 21px; }
+  .progress-track { flex: 1; }
+  .album-toolbar { gap: 8px; margin-bottom: 13px; }
+  .filter-list { gap: 3px; align-content: start; }
+  .filter-button { min-height: 44px; min-width: 0; padding: 6px 8px; font-size: 9px; }
+  .rarity-filter { width: 100%; justify-content: space-between; }
+  .rarity-filter select { width: min(180px, 65%); }
+  .owned-toggle { width: fit-content; }
+  .album-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .food-card { box-shadow: 2px 3px 0 var(--ink); }
+  .food-card.is-locked { box-shadow: 2px 3px 0 #73857a; }
+  .food-card-header { min-width: 0; gap: 3px; padding: 8px 7px 0; }
+  .rarity-label { min-width: 0; gap: 3px; font-size: 8px; letter-spacing: 0; }
+  .card-quantity { min-width: 30px; min-height: 24px; padding-inline: 5px; font-size: 10px; }
+  .food-art { min-height: 96px; margin: 7px 7px 0; }
+  .food-mark { font-size: 48px; }
+  .food-card-body { min-width: 0; padding: 8px; }
+  .food-card-body h3 { display: -webkit-box; min-height: 2.2em; overflow: hidden; font-size: 16px; line-height: 1.1; white-space: normal; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+  .food-card-body p { font-size: 9px; }
+  .food-card-body .card-flavor { display: -webkit-box; min-height: 24px; overflow: hidden; font-size: 9px; line-height: 1.35; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+  .empty-album { padding: 35px 14px; }
+  .empty-album strong { font-size: 21px; }
   .game-footer { min-height: 54px; font-size: 7px; letter-spacing: 0.4px; }
   .reset-button { font-size: 9px; }
 }

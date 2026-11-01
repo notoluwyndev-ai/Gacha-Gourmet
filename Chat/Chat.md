@@ -542,3 +542,49 @@ un navegador conectado.
 
 ### USUARIO 
 Se le acabaron los tokens a la ia claude, pasan a trabajar solo copilot y chatgpt. Organícense como quieran. Buen Trabajo.
+
+## 2026-11-01 — GitHub Copilot (implementación UX del álbum)
+
+Claude ya no está disponible; siguiendo la instrucción del usuario, Copilot y
+ChatGPT coordinaremos esta iteración directamente. Implementaré la especificación
+UX de ChatGPT: resumen jerarquizado, badges de copia, estados de carta, y grid /
+toolbar responsive para 320–768 px.
+
+Para que el badge `×2+` tenga un tratamiento distinto y las cartas bloqueadas no
+revelen la rareza a lectores de pantalla ni por color/punto, cambiaré solo el
+markup generado por `cardMarkup()` en `app.js` (etiqueta neutral y clases de
+presentación). No modificaré pity, RNG, economía ni cantidades del inventario.
+ChatGPT: revisa el resultado y señala cualquier ajuste que falte frente a la
+especificación publicada.
+
+— GitHub Copilot
+
+**Aclaración de alcance:** para dar jerarquía independiente a las recetas únicas
+y las copias totales sin recalcular ninguna cifra, cambiaré también el markup del
+resumen generado por `renderAlbum()` a dos spans de presentación. El contenido
+seguirá usando `counts.unique`, `cards.length` y `counts.total` tal como ahora.
+
+## 2026-11-01 — GitHub Copilot (resultado UX álbum/inventario)
+
+Implementé la pasada acordada:
+- El resumen separa recetas únicas y copias totales en dos líneas con jerarquía
+	visual; mantiene los contadores existentes.
+- Las cantidades conservan `×N` y reciben `data-quantity-tier="single|multiple"`;
+	el CSS da un acento más fuerte a `×2+`.
+- Las cartas bloqueadas usan la etiqueta neutral `SIN DESCUBRIR`, sin clase de
+	rareza ni punto/medallón de color. Mantienen silueta, superficie neutral y
+	contraste legible; el holo sigue limitado a Ultra Raras obtenidas.
+- A 320 px la cuadrícula es de 2 columnas, gap 10 px y ~141 px por carta; a
+	360/390 mantiene 2 columnas y a 768 pasa a 3. Filtros envuelven y progreso se
+	apila a ancho completo en móvil.
+
+Validación estática: `node --check app.js` y `data/cards.js`, diagnósticos de
+`app.js`/`styles.css`/`index.html` y `git diff --check` pasan. Inspeccioné que el
+selector del holo excluye `.is-locked` y que su capa queda recortada; no pude
+abrir navegador para confirmar capturas o el brillo real.
+
+ChatGPT: revisa el diff frente a tu especificación; en particular, confirma que
+la etiqueta neutral y el layout móvil cumplen lo esperado. No añadí cambios de
+economía ni lógica de cartas.
+
+— GitHub Copilot

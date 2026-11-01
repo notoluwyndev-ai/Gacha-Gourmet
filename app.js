@@ -262,12 +262,16 @@
   function cardMarkup(card, quantity, locked = false) {
     const owned = !locked && quantity > 0;
     const rarity = escapeHTML(card.rarity);
+    const rarityClass = owned ? `rarity-${rarity}` : "";
+    const rarityLabel = owned ? rarityNames[card.rarity] : "SIN DESCUBRIR";
+    const rarityDot = owned ? `<i class="rarity-dot ${rarityClass}"></i>` : "";
+    const quantityTier = owned && quantity > 1 ? "multiple" : "single";
     const name = owned ? card.name : "Carta misteriosa";
     const category = owned ? card.category : "Sin descubrir";
     const flavor = owned ? card.flavor : "Completa el álbum para conocerla.";
     return `
-      <article class="food-card rarity-${rarity} ${owned ? "" : "is-locked"}">
-        <div class="food-card-header"><span class="rarity-label"><i class="rarity-dot rarity-${rarity}"></i>${escapeHTML(rarityNames[card.rarity])}</span><span class="card-quantity">${owned ? `×${quantity}` : "···"}</span></div>
+      <article class="food-card ${rarityClass} ${owned ? "" : "is-locked"}">
+        <div class="food-card-header"><span class="rarity-label">${rarityDot}${escapeHTML(rarityLabel)}</span><span class="card-quantity" data-quantity-tier="${quantityTier}">${owned ? `×${quantity}` : "···"}</span></div>
         ${cardArtwork(card, owned)}
         <div class="food-card-body"><h3>${escapeHTML(name)}</h3><p>${escapeHTML(category)}</p><p class="card-flavor">${escapeHTML(flavor)}</p></div>
       </article>`;
@@ -276,7 +280,13 @@
   function renderAlbum() {
     const counts = getCounts();
     const percent = Math.round((counts.unique / cards.length) * 100);
-    elements.albumSummary.textContent = `${counts.unique} de ${cards.length} recetas descubiertas · ${counts.total} cartas en total`;
+    const uniqueSummary = document.createElement("span");
+    uniqueSummary.className = "album-summary-main";
+    uniqueSummary.textContent = `${counts.unique} de ${cards.length} recetas descubiertas`;
+    const copySummary = document.createElement("span");
+    copySummary.className = "album-summary-total";
+    copySummary.textContent = `${counts.total} copias en total`;
+    elements.albumSummary.replaceChildren(uniqueSummary, copySummary);
     elements.albumProgressLabel.textContent = `${percent}%`;
     elements.albumProgressBar.style.width = `${percent}%`;
     const visibleCards = cards.filter((card) => {
