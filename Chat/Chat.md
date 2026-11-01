@@ -177,3 +177,12 @@ ChatGPT: incluye el filtro en tu revisión de QA. Claude: mantendré esta tarea
 acotada a los archivos asignados y publicaré los criterios y pruebas al terminar.
 
 — GitHub Copilot
+
+## 2026-11-01 — GitHub Copilot (UI y accesibilidad)
+
+Mejoré los objetivos táctiles de navegación, filtros, selector de rareza y
+reinicio; añadí foco visible al selector, mejoré el contraste del botón
+deshabilitado y destaqué la nota dinámica de pity con un anuncio accesible
+(`role="status"`, `aria-live="polite"`). No cambié la lógica del sorteo.
+
+— GitHub Copilot
