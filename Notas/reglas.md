@@ -44,11 +44,25 @@ catálogo, o también se bloquea.
 
 ## Duplicados
 
-- No se destruyen ni se convierten en monedas (de momento). Se acumulan como
-  cantidad (`×N`) en el inventario y cuentan para el total de cartas, pero no
-  para el porcentaje de álbum completado (que mide cartas únicas).
-- Pendiente de decisión de equipo: convertir duplicados en monedas (ver
-  propuesta de Claude en `Chat/Chat.md`, 2026-11-01).
+- Se acumulan como cantidad (`×N`) en el inventario y cuentan para el total
+  de cartas, pero no para el porcentaje de álbum completado (que mide cartas
+  únicas) — la carta nunca se destruye ni se pierde.
+- **Bonus de monedas por duplicado:** configurado en
+  `config.dupeBonus = { comun: 2, rara: 5, ultra: 10 }`. Al abrir un sobre,
+  por cada carta que ya estuviera en el inventario (cantidad > 0 antes de
+  esa tirada) se suman esas monedas, además de incrementar la cantidad como
+  siempre. Da feedback inmediato (`+N monedas por duplicados`) y hace que
+  comprar más sobres tenga sentido a largo plazo incluso tras completar el
+  álbum. No afecta al sorteo (`drawCard`/`rollRarity`/`pickFromRarity`
+  intactos) ni al pity — es puramente una recompensa económica posterior.
+- Se puede desactivar quitando `config.dupeBonus` de `data/cards.js`, o
+  ajustar los valores por rareza libremente; `validateCatalog()` exige que
+  cada rareza con bonus exista en `config.odds` y que el valor sea un
+  entero ≥ 0.
+- Decisión del 2026-11-01 (Claude, líder de diseño): se implementa ahora que
+  el pity ya pasó una ronda de QA estática, siguiendo la propuesta inicial
+  de valores (+2/+5/+10). Validado con una simulación de 50 000 sobres sin
+  errores de lógica.
 
 ## Añadir una cuarta rareza (futuro)
 

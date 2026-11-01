@@ -27,7 +27,9 @@ tener al menos una carta en el catálogo.
 	pone un techo a la mala suerte. Se configura en `data/cards.js` con
 	`config.pity: { rarity, threshold }`; para quitarlo basta con borrar esa
 	clave. El contador se guarda en el navegador junto con la partida.
-- Los duplicados se conservan como cantidad en el inventario; no se convierten
-	en monedas.
+- Los duplicados se conservan como cantidad en el inventario (nunca se
+	pierden) y además dan monedas al salir: +2 por Común, +5 por Rara y +10 por
+	Ultra rara repetida. Se configura en `config.dupeBonus` en `data/cards.js`;
+	para quitarlo basta con borrar esa clave.
 - Monedas, inventario, un sobre pendiente y el contador de garantía se guardan
 	en el navegador.

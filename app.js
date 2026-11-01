@@ -88,6 +88,15 @@
         return "El umbral del sistema de garantía (pity) debe ser un entero positivo.";
       }
     }
+    if (config.dupeBonus) {
+      const dupeEntries = Object.entries(config.dupeBonus);
+      if (dupeEntries.some(([rarity]) => !Object.hasOwn(config.odds, rarity))) {
+        return "Cada rareza con bonus de duplicado debe existir en las probabilidades.";
+      }
+      if (dupeEntries.some(([, bonus]) => !Number.isInteger(bonus) || bonus < 0)) {
+        return "Cada bonus de duplicado debe ser un entero mayor o igual a 0.";
+      }
+    }
     return "";
   }
 
@@ -314,7 +323,18 @@
     if (!state.pack || state.pack.opened) return;
     const pulledCards = Array.from({ length: config.cardsPerPack }, drawCard);
     state.pack = { opened: true, cardIds: pulledCards.map((card) => card.id), revealed: 0 };
-    for (const card of pulledCards) state.inventory[card.id] = (state.inventory[card.id] || 0) + 1;
+    let dupeBonusEarned = 0;
+    for (const card of pulledCards) {
+      const alreadyOwned = (state.inventory[card.id] || 0) > 0;
+      state.inventory[card.id] = (state.inventory[card.id] || 0) + 1;
+      if (alreadyOwned && config.dupeBonus) {
+        dupeBonusEarned += config.dupeBonus[card.rarity] || 0;
+      }
+    }
+    if (dupeBonusEarned > 0) {
+      state.coins += dupeBonusEarned;
+      showMessage(`+${dupeBonusEarned} monedas por duplicados`);
+    }
     saveState();
     render();
   }
