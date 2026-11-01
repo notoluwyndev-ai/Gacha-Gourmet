@@ -21,6 +21,13 @@ tener al menos una carta en el catálogo.
 - 120 monedas al empezar; cada sobre cuesta 30.
 - 3 cartas por sobre; cada posición se sortea de forma independiente.
 - Probabilidades por carta: Común 75 %, Rara 20 % y Ultra rara 5 %.
+- **Sistema de garantía (pity):** si pasan 19 cartas seguidas sin salir Ultra
+	rara, la carta número 20 es Ultra rara garantizada y el contador se reinicia.
+	No cambia las probabilidades de cada tirada (siguen siendo 75/20/5); solo
+	pone un techo a la mala suerte. Se configura en `data/cards.js` con
+	`config.pity: { rarity, threshold }`; para quitarlo basta con borrar esa
+	clave. El contador se guarda en el navegador junto con la partida.
 - Los duplicados se conservan como cantidad en el inventario; no se convierten
 	en monedas.
-- Monedas, inventario y un sobre pendiente se guardan en el navegador.
+- Monedas, inventario, un sobre pendiente y el contador de garantía se guardan
+	en el navegador.

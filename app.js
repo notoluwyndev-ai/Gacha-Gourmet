@@ -13,6 +13,7 @@
     fatalError: document.querySelector("#fatal-error"),
     gameMessage: document.querySelector("#game-message"),
     odds: document.querySelector("#pack-odds"),
+    pityNote: document.querySelector("#pity-note"),
     ownedOnly: document.querySelector("#owned-only"),
     packArea: document.querySelector("#pack-area")
   };
@@ -21,7 +22,7 @@
   let messageTimer;
 
   function defaultState() {
-    return { coins: config.initialCoins, inventory: {}, pack: null };
+    return { coins: config.initialCoins, inventory: {}, pack: null, pity: 0 };
   }
 
   function normalizePack(pack) {
@@ -45,7 +46,8 @@
       return {
         coins: Number.isInteger(saved.coins) && saved.coins >= 0 ? saved.coins : config.initialCoins,
         inventory,
-        pack: normalizePack(saved.pack)
+        pack: normalizePack(saved.pack),
+        pity: Number.isInteger(saved.pity) && saved.pity >= 0 ? saved.pity : 0
       };
     } catch {
       return defaultState();
@@ -77,6 +79,14 @@
     if (cards.some((card) => !Object.hasOwn(config.odds, card.rarity))) {
       return "Todas las cartas deben pertenecer a una rareza configurada en las probabilidades.";
     }
+    if (config.pity) {
+      if (!Object.hasOwn(config.odds, config.pity.rarity)) {
+        return "La rareza del sistema de garantía (pity) debe existir en las probabilidades.";
+      }
+      if (!Number.isInteger(config.pity.threshold) || config.pity.threshold < 1) {
+        return "El umbral del sistema de garantía (pity) debe ser un entero positivo.";
+      }
+    }
     return "";
   }
 
@@ -101,7 +111,12 @@
     messageTimer = setTimeout(() => elements.gameMessage.classList.remove("is-visible"), 2600);
   }
 
-  function drawCard() {
+  function pickFromRarity(rarity) {
+    const pool = cards.filter((card) => card.rarity === rarity);
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  function rollRarity() {
     const roll = Math.random() * 100;
     let threshold = 0;
     let rarity = Object.keys(config.odds).at(-1);
@@ -112,8 +127,21 @@
         break;
       }
     }
-    const pool = cards.filter((card) => card.rarity === rarity);
-    return pool[Math.floor(Math.random() * pool.length)];
+    return rarity;
+  }
+
+  function drawCard() {
+    // Sistema de garantía (pity): si llevamos `threshold - 1` cartas seguidas
+    // sin la rareza protegida, esta tirada la fuerza, sin tocar las probabilidades base.
+    if (config.pity && state.pity >= config.pity.threshold - 1) {
+      state.pity = 0;
+      return pickFromRarity(config.pity.rarity);
+    }
+    const rarity = rollRarity();
+    if (config.pity) {
+      state.pity = rarity === config.pity.rarity ? 0 : state.pity + 1;
+    }
+    return pickFromRarity(rarity);
   }
 
   function getCounts() {
@@ -135,6 +163,13 @@
         <span>${escapeHTML(rarityNames[rarity])}</span>
         <strong>${chance}%</strong>
       </div>`).join("");
+    if (config.pity) {
+      const pulled = Math.min(state.pity, config.pity.threshold);
+      elements.pityNote.textContent = `Garantía: como mucho ${config.pity.threshold} cartas seguidas sin ${rarityNames[config.pity.rarity]} · llevas ${pulled}/${config.pity.threshold}`;
+      elements.pityNote.hidden = false;
+    } else {
+      elements.pityNote.hidden = true;
+    }
   }
 
   function renderPack() {

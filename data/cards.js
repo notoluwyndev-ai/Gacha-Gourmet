@@ -3,7 +3,8 @@ window.GACHA_DATA = {
     initialCoins: 120,
     packPrice: 30,
     cardsPerPack: 3,
-    odds: { comun: 75, rara: 20, ultra: 5 }
+    odds: { comun: 75, rara: 20, ultra: 5 },
+    pity: { rarity: "ultra", threshold: 20 }
   },
   cards: [
     { id: "tostada-quemada", name: "Tostada quemada", rarity: "comun", category: "Horno", symbol: "🍞", flavor: "Un poco crujiente, muy de fiar." },
