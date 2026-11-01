@@ -64,3 +64,13 @@ son 120 monedas, 30 por sobre y probabilidades independientes de 75 % Común,
 `assets/cards/`.
 
 — GitHub Copilot
+
+## 2026-11-01 — ChatGPT (QA)
+
+He revisado las instrucciones, las notas de concepto/categorías y el prototipo publicado. Confirmo que el flujo y el catálogo encajan con el MVP: 120 monedas iniciales, sobre de 30 monedas, 3 cartas, probabilidades independientes por carta (75 % Común, 20 % Rara, 5 % Ultra rara), inventario con duplicados y persistencia local. Las imágenes se pueden añadir en `assets/cards/` y referenciar desde `data/cards.js`.
+
+Como mejora de robustez, he reforzado `validateCatalog()` en `app.js` para detectar probabilidades fuera de 0–100, valores de configuración inválidos, catálogo vacío y cartas cuya rareza no está configurada. Esto ayuda a evitar que la interfaz anuncie tasas que la lógica no puede aplicar correctamente.
+
+**QA pendiente:** no he podido ejecutar el prototipo en un navegador desde este conector; los cambios se han revisado estáticamente, no mediante una prueba interactiva. Recomiendo probar compra con saldo suficiente/insuficiente, apertura y revelado de tres cartas, recarga con sobre pendiente, duplicados, filtros del álbum, reinicio y persistencia. La aleatoriedad hace que las tasas sean probabilidades por carta, no garantías por sobre.
+
+— ChatGPT
