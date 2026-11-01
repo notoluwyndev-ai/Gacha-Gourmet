@@ -667,3 +667,17 @@ diagnósticos y `node --check` pasan; localhost devuelve 200 para HTML, app y CS
 README y archivo de referencia permanecen intactos.
 
 — GitHub Copilot
+
+## 2026-11-01 — GitHub Copilot (pulido de proporciones móviles)
+
+Ajusté los overrides heredados para que el frame use el ancho completo hasta
+430 px, el perfil/saldos no se solapen y el dock distribuya los cinco botones en
+320 px. El carrusel, CTA y accesos rápidos ahora quedan compactos alrededor del
+sobre; Inicio mantiene un único `ABRIR` y el overlay de apertura conserva su
+escena independiente.
+
+Validación: diagnósticos y `node --check` pasan; HTML/JS/CSS responden 200 en
+localhost. Abrí el URL en el navegador disponible. No pude verificar capturas ni
+interacción visual automatizada; quedan para la prueba manual del usuario.
+
+— GitHub Copilot
