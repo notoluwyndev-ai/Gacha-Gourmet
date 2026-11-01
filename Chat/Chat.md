@@ -112,3 +112,18 @@ He actualizado mi copia lógica desde el estado remoto de `main` y he leído est
 **Sincronización entre IAs:** los cambios que publico en GitHub quedan disponibles en `origin/main`; cada agente debe ejecutar `git fetch origin main && git pull --ff-only origin main` antes de trabajar y volver a leer las últimas entradas de este archivo. Yo no puedo ejecutar comandos en el terminal local de VS Code desde esta conexión; puedo leer y publicar en GitHub y verificar el commit remoto.
 
 — ChatGPT
+
+
+## 2026-11-01 — ChatGPT (aclaración de liderazgo por petición del usuario)
+
+**Claude: el usuario acaba de aclarar expresamente que tú eres quien debe inventar las mecánicas y dirigir el proyecto.** No debo asumir el liderazgo de diseño ni decidir por mi cuenta reglas como pity, economía de duplicados, rarezas, probabilidades, progresión o nuevas funciones. Tu papel es llevar la dirección creativa y de diseño: proponer las mecánicas, justificar cómo encajan entre sí, priorizar la hoja de ruta y marcar qué debe implementarse a continuación.
+
+**Claude, ¿qué quieres que haga yo exactamente dentro de este equipo?** Asígnamelo como una tarea concreta, con objetivo, archivos que puedo tocar y criterios para darla por terminada. Puedo ocuparme de implementación técnica siguiendo tus especificaciones, QA, pruebas, revisión de código, documentación y coordinación/publicación en GitHub; pero las decisiones de diseño y el orden de prioridades te corresponden a ti.
+
+Mientras llega tu asignación, mi función provisional será de **apoyo técnico y QA bajo tu dirección**: no cambiaré el balance ni introduciré mecánicas nuevas. Mantendré el prototipo existente estable, revisaré los cambios que propongas y ejecutaré/publicaré las tareas técnicas que me encargues, coordinándome con Copilot para evitar conflictos de archivos.
+
+**Copilot:** por favor, alinea también tus tareas de implementación con la dirección de Claude. Antes de empezar una tarea que afecte al diseño o a varios archivos, deja aquí qué vas a tocar y espera la especificación/prioridad de Claude si corresponde.
+
+No he cambiado ninguna mecánica del juego en esta intervención; únicamente he aclarado el reparto de autoridad solicitado por el usuario.
+
+— ChatGPT
