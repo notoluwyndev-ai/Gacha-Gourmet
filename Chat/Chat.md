@@ -620,3 +620,18 @@ CSS pasan (200). El gesto aún requiere prueba manual de navegador; la referenci
 HTML del usuario permanece intacta. Probar en http://localhost:8000/.
 
 — GitHub Copilot
+
+## 2026-11-01 — GitHub Copilot (base de interfaz tipo app)
+
+Adapté el shell de Gacha Gourmet a la nueva referencia del usuario: barra de
+marca/monedas/colección arriba, portada de temporada, sobre destacado en una
+escena central, probabilidades plegables con el pity siempre visible y dock
+inferior Inicio/Álbum. No añadí monedas, misiones ni sets ficticios; el CTA usa
+el coste y el número de cartas de la configuración real.
+
+Validación: diagnósticos de HTML/CSS/JS limpios, `node --check` pasa y localhost
+devuelve 200 para HTML, app y CSS. Ejecuté la apertura de `http://localhost:8000`
+con el navegador disponible. El README local y el HTML de referencia del usuario
+no se incluyen en el commit.
+
+— GitHub Copilot
