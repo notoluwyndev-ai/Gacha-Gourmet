@@ -178,6 +178,10 @@ h1 { margin-bottom: 3px; font-family: var(--font-display); font-size: 48px; line
 .rarity-rara { --rarity-color: #538ec7; }
 .rarity-ultra { --rarity-color: #d84c9a; }
 .pity-note { margin: 13px 0 0; padding: 11px 12px; border-left: 3px solid var(--tomato); border-radius: 3px; background: #f5efe0; color: var(--ink); font-size: 11px; font-weight: 800; line-height: 1.45; }
+.pity-note.is-guaranteed { border-left-color: var(--mint-dark); background: #d9efdf; color: #173c32; }
+.pity-progress { height: 6px; margin-top: 7px; overflow: hidden; border-radius: 8px; background: #e2e8de; }
+.pity-progress span { display: block; width: 0; height: 100%; border-radius: inherit; background: var(--tomato); transition: width 180ms ease, background-color 180ms ease; }
+.pity-note.is-guaranteed + .pity-progress span { background: var(--mint-dark); }
 .odds-footnote { margin-top: 18px; padding-top: 13px; border-top: 1px dashed var(--line); color: var(--ink-soft); font-size: 10px; }
 .odds-footnote span { margin-right: 4px; color: var(--tomato); }
 .daily-special { display: flex; align-items: center; gap: 11px; margin-top: 22px; padding: 12px; border-radius: 5px; background: #f4f0dc; }

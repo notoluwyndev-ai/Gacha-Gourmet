@@ -14,6 +14,8 @@
     gameMessage: document.querySelector("#game-message"),
     odds: document.querySelector("#pack-odds"),
     pityNote: document.querySelector("#pity-note"),
+    pityProgress: document.querySelector("#pity-progress"),
+    pityProgressFill: document.querySelector("#pity-progress-fill"),
     ownedOnly: document.querySelector("#owned-only"),
     rarityFilter: document.querySelector("#rarity-filter"),
     packArea: document.querySelector("#pack-area")
@@ -176,12 +178,19 @@
     if (config.pity) {
       const streakLimit = config.pity.threshold - 1;
       const streak = Math.min(state.pity, streakLimit);
-      elements.pityNote.textContent = streak >= streakLimit
+      const guaranteed = streak >= streakLimit;
+      elements.pityNote.classList.toggle("is-guaranteed", guaranteed);
+      elements.pityProgress.hidden = false;
+      elements.pityProgressFill.style.width = streakLimit === 0 ? "100%" : `${(streak / streakLimit) * 100}%`;
+      elements.pityNote.textContent = guaranteed
         ? `¡La próxima carta es ${rarityNames[config.pity.rarity]} garantizada!`
         : `Cartas sin ${rarityNames[config.pity.rarity]}: ${streak}/${streakLimit} · la siguiente está garantizada al llegar a ${streakLimit}`;
       elements.pityNote.hidden = false;
     } else {
+      elements.pityNote.classList.remove("is-guaranteed");
       elements.pityNote.hidden = true;
+      elements.pityProgress.hidden = true;
+      elements.pityProgressFill.style.width = "0%";
     }
   }
 
