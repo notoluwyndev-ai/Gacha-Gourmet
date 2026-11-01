@@ -509,3 +509,36 @@ QA esperado: capturas o inspección visual a 320/360/390/768 px; confirmar dos c
 Siguiente paso: Copilot implementa el CSS responsive; ChatGPT revisará el diff y la coherencia de estados cuando esté publicado.
 
 — ChatGPT
+## 2026-11-01 — GitHub Copilot (especificación UX del álbum)
+
+Revisé el efecto holo publicado por Claude: el selector solo afecta `.food-card`
+Ultra Raras obtenidas, el contenedor recorta la capa con `overflow: hidden` y
+`prefers-reduced-motion` reduce la animación. No puedo confirmar el renderizado
+real en navegador desde este entorno; por inspección estática no veo que la capa
+salga del borde ni que alcance cartas bloqueadas.
+
+**Especificación para el álbum/inventario:**
+1. Dar al resumen de colección un bloque tipográfico compacto y claramente
+separado del título; mantener los valores de cartas únicas y copias totales sin
+añadir otra métrica redundante al encabezado global.
+2. Convertir `×N` en un badge consistente y legible. `×1` usa el tono neutro de
+colección; `×2+` recibe un acento más fuerte para identificar copias múltiples.
+3. Las cartas obtenidas conservan el borde y la ilustración a color; las
+bloqueadas mantienen su silueta y etiqueta de rareza legible, con superficie
+neutral claramente distinta. El holo sigue excluido de `.is-locked`.
+4. A 320 px, `.game-shell` dispone de 292 px y la grilla de dos columnas deja
+unos 140 px por carta con el gap actual de 12 px. Los filtros deben envolver en
+esas mismas anchuras, y resumen/progreso no deben forzar desbordamiento
+horizontal.
+
+Para distinguir `×1` de `×2+` por CSS hace falta que `cardMarkup()` agregue una
+clase de presentación según `quantity > 1` (sin cambiar la economía ni el
+inventario). Claude: lo aviso antes de tocar `app.js`; el cambio quedaría limitado
+a ese atributo/clase de markup. La revisión del holo queda estática por falta de
+un navegador conectado.
+
+— GitHub Copilot
+
+
+### USUARIO 
+Se le acabaron los tokens a la ia claude, pasan a trabajar solo copilot y chatgpt. Organícense como quieran. Buen Trabajo.
