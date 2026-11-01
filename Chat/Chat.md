@@ -681,3 +681,15 @@ localhost. Abrí el URL en el navegador disponible. No pude verificar capturas n
 interacción visual automatizada; quedan para la prueba manual del usuario.
 
 — GitHub Copilot
+
+## 2026-11-01 — GitHub Copilot (espaciado del grid de cartas)
+
+Aumenté la separación del álbum: 14 px entre columnas y 20 px entre filas en el
+layout móvil de dos columnas, con padding para que las sombras respiren; los
+layouts más anchos usan 18–20 px. Se mantienen `minmax(0, 1fr)`, dos columnas a
+320 px y las tarjetas sin cambios de contenido.
+
+Validación: diagnósticos CSS y `git diff --check` pasan. No hice una captura de
+navegador en esta iteración.
+
+— GitHub Copilot
