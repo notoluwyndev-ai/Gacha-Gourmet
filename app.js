@@ -165,8 +165,11 @@
         <strong>${chance}%</strong>
       </div>`).join("");
     if (config.pity) {
-      const pulled = Math.min(state.pity, config.pity.threshold);
-      elements.pityNote.textContent = `Garantía: como mucho ${config.pity.threshold} cartas seguidas sin ${rarityNames[config.pity.rarity]} · llevas ${pulled}/${config.pity.threshold}`;
+      const streakLimit = config.pity.threshold - 1;
+      const streak = Math.min(state.pity, streakLimit);
+      elements.pityNote.textContent = streak >= streakLimit
+        ? `¡La próxima carta es ${rarityNames[config.pity.rarity]} garantizada!`
+        : `Cartas sin ${rarityNames[config.pity.rarity]}: ${streak}/${streakLimit} · la siguiente está garantizada al llegar a ${streakLimit}`;
       elements.pityNote.hidden = false;
     } else {
       elements.pityNote.hidden = true;
