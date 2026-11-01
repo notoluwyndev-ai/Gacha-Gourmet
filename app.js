@@ -23,6 +23,7 @@
   let activeScreen = "packs";
   let activeCategory = "Todas";
   let messageTimer;
+  let packGesture = null;
 
   function defaultState() {
     return { coins: config.initialCoins, inventory: {}, pack: null, pity: 0 };
@@ -194,18 +195,40 @@
     }
   }
 
+  function packArtwork(interactive = false) {
+    const interaction = interactive
+      ? 'data-pack-drag role="button" tabindex="0" aria-label="Arrastra el sobre hacia arriba para rasgar el sello"'
+      : 'aria-hidden="true"';
+    const artworkClass = interactive ? "pack-drag-target" : "pack-hero";
+    return `
+      <div class="pack-spectacle">
+        <div class="scene-halo" aria-hidden="true"></div>
+        <div class="scene-ring scene-ring-one" aria-hidden="true"></div>
+        <div class="scene-ring scene-ring-two" aria-hidden="true"></div>
+        <div class="pack-illustration ${artworkClass}" ${interaction}>
+          <div class="pack-content">
+            <span class="pack-emblem">✦</span>
+            <span class="pack-name">GACHA<br><strong>GOURMET</strong></span>
+            <span class="pack-sub">MENÚ SECRETO</span>
+          </div>
+          <span class="pack-tear-line" aria-hidden="true"></span>
+        </div>
+        <p class="pack-stage-caption">EDICIÓN · MENÚ SECRETO</p>
+      </div>`;
+  }
+
   function renderPack() {
     if (!state.pack) {
       const canAfford = state.coins >= config.packPrice;
       const shortfall = config.packPrice - state.coins;
       elements.packArea.innerHTML = `
-        <div class="shop-layout">
-          <div class="pack-illustration" aria-hidden="true"><div class="pack-seal"><span>✦</span><small>MENÚ<br>SECRETO</small></div></div>
+        <div class="pack-opening-layout">
+          ${packArtwork()}
           <div class="pack-copy">
-            <p class="eyebrow">SOBRE SORPRESA</p>
-            <h2>¿Qué se cocina?</h2>
-            <p>Un menú nuevo cabe en la palma de tu mano.</p>
-            <div class="pack-specs"><span><b>3</b> cartas por sobre</span><span><b>30</b> monedas</span></div>
+            <p class="eyebrow"><span class="eyebrow-dot"></span> SOBRE SORPRESA</p>
+            <h2>El menú secreto<br>está por abrirse.</h2>
+            <p>Tres cartas salen a escena. Cada sobre guarda una combinación distinta.</p>
+            <div class="pack-specs"><span><b>${config.cardsPerPack}</b> cartas</span><span><b>${config.packPrice}</b> monedas</span></div>
             <button class="primary-button" type="button" data-action="buy-pack" ${canAfford && !catalogError ? "" : "disabled"}>Comprar sobre <span aria-hidden="true">·</span> ${config.packPrice} monedas</button>
             ${canAfford ? "" : `<p class="insufficient">Te faltan ${shortfall} monedas.</p>`}
           </div>
@@ -215,11 +238,16 @@
 
     if (!state.pack.opened) {
       elements.packArea.innerHTML = `
-        <div class="pending-pack">
-          <div class="pack-illustration" aria-hidden="true"><div class="pack-seal"><span>✦</span><small>MENÚ</small></div></div>
-          <h2>¡Tu sorpresa está lista!</h2>
-          <p>Dentro te esperan tres cartas. ¿Descubrimos qué ha tocado?</p>
-          <button class="primary-button" type="button" data-action="open-pack">Romper el sello</button>
+        <div class="pack-opening-layout is-ready">
+          ${packArtwork(true)}
+          <div class="pack-copy">
+            <p class="eyebrow"><span class="eyebrow-dot"></span> SELLO INTACTO</p>
+            <h2>¡Tu sorpresa<br>está lista!</h2>
+            <p>Dentro te esperan ${config.cardsPerPack} cartas. Desliza el sobre hacia arriba o usa el botón para revelar el menú.</p>
+            <div class="pack-specs"><span><b>${config.cardsPerPack}</b> cartas</span><span><b>${config.packPrice}</b> monedas</span></div>
+            <button class="primary-button" type="button" data-action="open-pack">Rasgar y revelar</button>
+            <span class="gesture-caption">ARRASTRA EL SOBRE HACIA ARRIBA</span>
+          </div>
         </div>`;
       return;
     }
@@ -231,8 +259,8 @@
       }).join("");
       elements.packArea.innerHTML = `
         <div class="pack-complete">
-          <p class="eyebrow">¡MENÚ SERVIDO!</p>
-          <h2>¡Tres cartas sobre la mesa!</h2>
+          <p class="eyebrow"><span class="eyebrow-dot"></span> MENÚ SERVIDO</p>
+          <h2>¡Tres cartas<br>sobre la mesa!</h2>
           <p>Ya puedes verlas en tu álbum. ¿Qué te ha tocado?</p>
           <div class="revealed-card-row">${summaryCards}</div>
           <div class="pack-complete-actions">
@@ -244,10 +272,15 @@
     }
 
     const card = cardsById.get(state.pack.cardIds[state.pack.revealed]);
+    const progressDots = state.pack.cardIds.map((_, index) => `<span class="reveal-step ${index <= state.pack.revealed ? "is-lit" : ""}"></span>`).join("");
     elements.packArea.innerHTML = `
-      <div class="reveal-stage">
-        <p class="reveal-progress">Carta ${state.pack.revealed + 1} de ${state.pack.cardIds.length}</p>
+      <div class="reveal-stage rarity-${escapeHTML(card.rarity)}">
+        <div class="reveal-heading">
+          <div><p class="eyebrow"><span class="eyebrow-dot"></span> CARTA REVELADA</p><p class="reveal-progress">${String(state.pack.revealed + 1).padStart(2, "0")} <span>/ ${String(state.pack.cardIds.length).padStart(2, "0")}</span></p></div>
+          <div class="reveal-steps" aria-hidden="true">${progressDots}</div>
+        </div>
         <div class="reveal-card">${cardMarkup(card, state.inventory[card.id])}</div>
+        <p class="reveal-invitation">Una receta nueva toma el centro de la mesa.</p>
         <button class="primary-button" type="button" data-action="next-card">${state.pack.revealed === state.pack.cardIds.length - 1 ? "¡Descubrir la última!" : "Revelar siguiente"}</button>
       </div>`;
   }
@@ -373,6 +406,45 @@
     showMessage("Partida reiniciada.");
     render();
   }
+
+  document.addEventListener("pointerdown", (event) => {
+    const target = event.target.closest?.("[data-pack-drag]");
+    if (!target || !state.pack || state.pack.opened) return;
+    packGesture = { pointerId: event.pointerId, startY: event.clientY, target };
+    target.classList.add("is-dragging");
+    target.setPointerCapture(event.pointerId);
+    event.preventDefault();
+  });
+
+  document.addEventListener("pointermove", (event) => {
+    if (!packGesture || event.pointerId !== packGesture.pointerId) return;
+    const pull = Math.max(0, Math.min(1, (packGesture.startY - event.clientY) / 150));
+    packGesture.target.style.setProperty("--pack-pull", pull.toFixed(2));
+    packGesture.target.style.setProperty("--pack-drag-y", `${-pull * 72}px`);
+    packGesture.target.style.setProperty("--pack-drag-rotation", `${-pull * 9}deg`);
+    if (event.cancelable) event.preventDefault();
+  });
+
+  function finishPackGesture(event, cancelled = false) {
+    if (!packGesture || event.pointerId !== packGesture.pointerId) return;
+    const { target } = packGesture;
+    const pull = Number(target.style.getPropertyValue("--pack-pull")) || 0;
+    target.classList.remove("is-dragging");
+    target.style.removeProperty("--pack-pull");
+    target.style.removeProperty("--pack-drag-y");
+    target.style.removeProperty("--pack-drag-rotation");
+    packGesture = null;
+    if (!cancelled && pull >= 0.68) openPack();
+  }
+
+  document.addEventListener("pointerup", finishPackGesture);
+  document.addEventListener("pointercancel", (event) => finishPackGesture(event, true));
+  document.addEventListener("keydown", (event) => {
+    const target = event.target.closest?.("[data-pack-drag]");
+    if (!target || !["Enter", " "].includes(event.key)) return;
+    event.preventDefault();
+    openPack();
+  });
 
   document.addEventListener("click", (event) => {
     const screenButton = event.target.closest("[data-screen]");

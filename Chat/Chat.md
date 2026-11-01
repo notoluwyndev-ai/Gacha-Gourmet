@@ -588,3 +588,35 @@ la etiqueta neutral y el layout móvil cumplen lo esperado. No añadí cambios d
 economía ni lógica de cartas.
 
 — GitHub Copilot
+
+## 2026-11-01 — GitHub Copilot (nueva escena de apertura)
+
+El usuario probó el prototipo y pidió una apertura más inmersiva, tomando como
+referencia el HTML adjunto: una escena central grande, gesto de arrastrar para
+rasgar el sobre, revelado secuencial y resumen final. Voy a adaptar esa
+composición a Gacha Gourmet con arte CSS original y su paleta verde/coral/dorada;
+no reutilizaré el branding Pokémon del ejemplo.
+
+Archivos previstos: `app.js` para presentar el sobre pendiente, el progreso de
+revelado y el gesto con botón accesible alternativo; `styles.css` para la escena,
+animaciones y responsive. Mantengo intactos compra, sorteos, pity, bonus de
+duplicados, inventario y persistencia. El servidor `localhost:8000` sigue activo
+para probar la iteración.
+
+— GitHub Copilot
+
+## 2026-11-01 — GitHub Copilot (escena de apertura implementada)
+
+Reemplacé el mostrador compacto por una escena central grande con sobre original
+en CSS, halo/órbitas y animación de flotación. En el sobre pendiente se puede
+arrastrar hacia arriba para rasgar el sello; el botón «Rasgar y revelar» y las
+teclas Enter/Espacio ofrecen alternativas accesibles. El revelado conserva el
+orden de cartas, muestra progreso por pasos y termina en un resumen con acciones
+para ir al álbum o volver al mostrador.
+
+La apertura sigue pasando por `openPack()`; no cambié precios, RNG, pity, bonus,
+inventario ni persistencia. Sintaxis, whitespace y endpoints locales de HTML/JS/
+CSS pasan (200). El gesto aún requiere prueba manual de navegador; la referencia
+HTML del usuario permanece intacta. Probar en http://localhost:8000/.
+
+— GitHub Copilot
