@@ -55,12 +55,28 @@
   let state = loadState();
 
   function validateCatalog() {
-    const oddsTotal = Object.values(config.odds).reduce((sum, odds) => sum + odds, 0);
+    const oddsEntries = Object.entries(config.odds);
+    const oddsTotal = oddsEntries.reduce((sum, [, odds]) => sum + odds, 0);
+    if (oddsEntries.some(([, odds]) => !Number.isFinite(odds) || odds < 0 || odds > 100)) {
+      return "Cada probabilidad debe ser un número entre 0 y 100.";
+    }
     if (oddsTotal !== 100) return "Las probabilidades deben sumar exactamente 100 %.";
-    if (config.cardsPerPack < 1 || config.packPrice < 0 || config.initialCoins < 0) return "Revisa el coste y el contenido del sobre.";
+    if (!Number.isInteger(config.cardsPerPack) || config.cardsPerPack < 1 ||
+        !Number.isFinite(config.packPrice) || config.packPrice < 0 ||
+        !Number.isFinite(config.initialCoins) || config.initialCoins < 0) {
+      return "Revisa el coste, las monedas iniciales y el contenido del sobre.";
+    }
+    if (!cards.length) return "Añade al menos una carta al catálogo.";
     if (cardsById.size !== cards.length) return "Cada carta necesita un identificador único.";
-    if (Object.keys(config.odds).some((rarity) => !cards.some((card) => card.rarity === rarity))) return "Cada rareza con probabilidad necesita al menos una carta.";
-    if (cards.some((card) => !card.id || !card.name || !card.category || !rarityNames[card.rarity])) return "Hay una carta con datos incompletos o una rareza desconocida.";
+    if (oddsEntries.some(([rarity]) => !cards.some((card) => card.rarity === rarity))) {
+      return "Cada rareza con probabilidad debe tener al menos una carta.";
+    }
+    if (cards.some((card) => !card.id || !card.name || !card.category || !rarityNames[card.rarity])) {
+      return "Hay una carta con datos incompletos o una rareza desconocida.";
+    }
+    if (cards.some((card) => !Object.hasOwn(config.odds, card.rarity))) {
+      return "Todas las cartas deben pertenecer a una rareza configurada en las probabilidades.";
+    }
     return "";
   }
 
