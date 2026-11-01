@@ -210,6 +210,8 @@ h1 { margin-bottom: 3px; font-family: var(--font-display); font-size: 48px; line
 .filter-button { padding: 7px 10px; border: 1px solid transparent; border-radius: 4px; background: transparent; color: var(--ink-soft); cursor: pointer; font-size: 10px; font-weight: 800; }
 .filter-button:hover { border-color: var(--line); }
 .filter-button.is-active { border-color: var(--ink); background: var(--ink); color: var(--white); }
+.rarity-filter { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 7px; color: var(--ink-soft); font-size: 10px; font-weight: 900; }
+.rarity-filter select { min-height: 32px; padding: 5px 24px 5px 8px; border: 1px solid var(--line); border-radius: 4px; background: var(--white); color: var(--ink); font-size: 10px; font-weight: 800; }
 .owned-toggle { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 8px; cursor: pointer; color: var(--ink-soft); font-size: 11px; font-weight: 800; }
 .owned-toggle input { position: absolute; width: 1px; height: 1px; opacity: 0; }
 .toggle-track { position: relative; width: 32px; height: 18px; border-radius: 20px; background: #c8d1c8; transition: background-color 150ms ease; }

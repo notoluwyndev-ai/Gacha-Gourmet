@@ -15,6 +15,7 @@
     odds: document.querySelector("#pack-odds"),
     pityNote: document.querySelector("#pity-note"),
     ownedOnly: document.querySelector("#owned-only"),
+    rarityFilter: document.querySelector("#rarity-filter"),
     packArea: document.querySelector("#pack-area")
   };
   let activeScreen = "packs";
@@ -259,8 +260,9 @@
     elements.albumProgressBar.style.width = `${percent}%`;
     const visibleCards = cards.filter((card) => {
       const matchesCategory = activeCategory === "Todas" || card.category === activeCategory;
+      const matchesRarity = elements.rarityFilter.value === "Todas" || card.rarity === elements.rarityFilter.value;
       const matchesOwned = !elements.ownedOnly.checked || state.inventory[card.id] > 0;
-      return matchesCategory && matchesOwned;
+      return matchesCategory && matchesRarity && matchesOwned;
     });
     elements.albumGrid.innerHTML = visibleCards.length
       ? visibleCards.map((card) => cardMarkup(card, state.inventory[card.id] || 0, !(state.inventory[card.id] > 0))).join("")
@@ -371,6 +373,7 @@
   });
 
   elements.ownedOnly.addEventListener("change", renderAlbum);
+  elements.rarityFilter.addEventListener("change", renderAlbum);
 
   const catalogError = validateCatalog();
   if (catalogError) {
