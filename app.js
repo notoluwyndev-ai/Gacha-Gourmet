@@ -16,6 +16,10 @@
     pityNote: document.querySelector("#pity-note"),
     pityProgress: document.querySelector("#pity-progress"),
     pityProgressFill: document.querySelector("#pity-progress-fill"),
+    homePityLabel: document.querySelector("#home-pity-label"),
+    homePityFill: document.querySelector("#home-pity-fill"),
+    homeOpenButton: document.querySelector("#home-open-button"),
+    homePackSub: document.querySelector("#home-pack-sub"),
     ownedOnly: document.querySelector("#owned-only"),
     rarityFilter: document.querySelector("#rarity-filter"),
     packArea: document.querySelector("#pack-area")
@@ -180,6 +184,11 @@
       const streakLimit = config.pity.threshold - 1;
       const streak = Math.min(state.pity, streakLimit);
       const guaranteed = streak >= streakLimit;
+      elements.homePityLabel.textContent = `${streak}/${streakLimit}`;
+      elements.homePityFill.style.width = streakLimit === 0 ? "100%" : `${(streak / streakLimit) * 100}%`;
+      elements.homePityFill.parentElement.setAttribute("aria-valuemax", String(streakLimit));
+      elements.homePityFill.parentElement.setAttribute("aria-valuenow", String(streak));
+      elements.homePityFill.parentElement.setAttribute("aria-label", `Progreso de garantía ${rarityNames[config.pity.rarity]}`);
       elements.pityNote.classList.toggle("is-guaranteed", guaranteed);
       elements.pityProgress.hidden = false;
       elements.pityProgressFill.style.width = streakLimit === 0 ? "100%" : `${(streak / streakLimit) * 100}%`;
@@ -188,6 +197,9 @@
         : `Cartas sin ${rarityNames[config.pity.rarity]}: ${streak}/${streakLimit} · la siguiente está garantizada al llegar a ${streakLimit}`;
       elements.pityNote.hidden = false;
     } else {
+      elements.homePityLabel.textContent = "Sin garantía";
+      elements.homePityFill.style.width = "0%";
+      elements.homePityFill.parentElement.setAttribute("aria-valuenow", "0");
       elements.pityNote.classList.remove("is-guaranteed");
       elements.pityNote.hidden = true;
       elements.pityProgress.hidden = true;
@@ -219,20 +231,7 @@
 
   function renderPack() {
     if (!state.pack) {
-      const canAfford = state.coins >= config.packPrice;
-      const shortfall = config.packPrice - state.coins;
-      elements.packArea.innerHTML = `
-        <div class="pack-opening-layout">
-          ${packArtwork()}
-          <div class="pack-copy">
-            <p class="eyebrow"><span class="eyebrow-dot"></span> SOBRE SORPRESA</p>
-            <h2>El menú secreto<br>está por abrirse.</h2>
-            <p>Tres cartas salen a escena. Cada sobre guarda una combinación distinta.</p>
-            <div class="pack-specs"><span><b>${config.cardsPerPack}</b> cartas</span><span><b>${config.packPrice}</b> monedas</span></div>
-            <button class="primary-button" type="button" data-action="buy-pack" ${canAfford && !catalogError ? "" : "disabled"}>Comprar sobre <span aria-hidden="true">·</span> ${config.packPrice} monedas</button>
-            ${canAfford ? "" : `<p class="insufficient">Te faltan ${shortfall} monedas.</p>`}
-          </div>
-        </div>`;
+      elements.packArea.innerHTML = "";
       return;
     }
 
@@ -242,11 +241,10 @@
           ${packArtwork(true)}
           <div class="pack-copy">
             <p class="eyebrow"><span class="eyebrow-dot"></span> SELLO INTACTO</p>
-            <h2>¡Tu sorpresa<br>está lista!</h2>
-            <p>Dentro te esperan ${config.cardsPerPack} cartas. Desliza el sobre hacia arriba o usa el botón para revelar el menú.</p>
-            <div class="pack-specs"><span><b>${config.cardsPerPack}</b> cartas</span><span><b>${config.packPrice}</b> monedas</span></div>
-            <button class="primary-button" type="button" data-action="open-pack">Rasgar y revelar</button>
-            <span class="gesture-caption">ARRASTRA EL SOBRE HACIA ARRIBA</span>
+            <h2>Rasga el sello</h2>
+            <p>Desliza el sobre hacia arriba para descubrir tus ${config.cardsPerPack} cartas.</p>
+            <button class="primary-button" type="button" data-action="open-pack">RASGAR Y REVELAR</button>
+            <span class="gesture-caption">O MANTÉN Y ARRASTRA</span>
           </div>
         </div>`;
       return;
@@ -265,7 +263,7 @@
           <div class="revealed-card-row">${summaryCards}</div>
           <div class="pack-complete-actions">
             <button class="secondary-button" type="button" data-action="finish-album">Ver álbum</button>
-            <button class="primary-button" type="button" data-action="finish-packs">Volver al mostrador</button>
+            <button class="primary-button" type="button" data-action="finish-packs">Volver al inicio</button>
           </div>
         </div>`;
       return;
@@ -345,11 +343,13 @@
   function render() {
     renderHeader();
     renderOdds();
+    renderHome();
     renderPack();
     renderAlbum();
     document.querySelectorAll(".screen").forEach((screen) => {
       screen.hidden = screen.id !== `screen-${activeScreen}`;
     });
+    document.querySelector(".game-shell").classList.toggle("is-opening", activeScreen === "opening");
     document.querySelectorAll("[data-screen]").forEach((button) => {
       const selected = button.dataset.screen === activeScreen;
       button.classList.toggle("is-active", selected);
@@ -363,11 +363,30 @@
     applyImageFallbacks();
   }
 
+  function renderHome() {
+    if (state.pack) {
+      elements.homeOpenButton.textContent = "CONTINUAR";
+      elements.homeOpenButton.dataset.action = "continue-pack";
+      elements.homeOpenButton.disabled = false;
+      elements.homePackSub.textContent = "Sobre en curso";
+      return;
+    }
+    const availablePacks = Math.floor(state.coins / config.packPrice);
+    const shortfall = Math.max(0, config.packPrice - state.coins);
+    elements.homeOpenButton.textContent = "ABRIR";
+    elements.homeOpenButton.dataset.action = "buy-pack";
+    elements.homeOpenButton.disabled = Boolean(catalogError) || availablePacks < 1;
+    elements.homePackSub.textContent = availablePacks > 0
+      ? `Sobres disponibles: ${availablePacks}`
+      : `Te faltan ${shortfall} monedas`;
+  }
+
   function buyPack() {
     if (catalogError || state.pack || state.coins < config.packPrice) return;
     state.coins -= config.packPrice;
     state.pack = { opened: false, cardIds: [], revealed: 0 };
     saveState();
+    activeScreen = "opening";
     render();
   }
 
@@ -471,6 +490,15 @@
     if (!actionButton) return;
     switch (actionButton.dataset.action) {
       case "buy-pack": buyPack(); break;
+      case "continue-pack":
+        activeScreen = "opening";
+        render();
+        break;
+      case "return-home":
+        activeScreen = "packs";
+        render();
+        break;
+      case "placeholder": showMessage(actionButton.dataset.message || "Próximamente"); break;
       case "open-pack": openPack(); break;
       case "next-card":
         if (state.pack) {

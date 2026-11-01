@@ -635,3 +635,35 @@ con el navegador disponible. El README local y el HTML de referencia del usuario
 no se incluyen en el commit.
 
 — GitHub Copilot
+
+## 2026-11-01 — GitHub Copilot (ajuste de navegación según nueva referencia)
+
+El usuario precisó que quiere la misma organización y posiciones del HTML de
+referencia: perfil/monedas arriba, título de sobres disponibles, carrusel del
+sobre, indicador de progreso, botón primario único `ABRIR`, accesos a Eventos y
+Misiones y dock inferior de cinco botones (Tienda, Cartas, Social, Batalla,
+Menú). Voy a adaptar esos botones a Gacha Gourmet; los destinos aún no existentes
+mostrarán un aviso de «Próximamente» en vez de simular funcionalidades.
+
+`ABRIR` comprará el sobre con el precio real y llevará a la escena de rasgado ya
+implementada. El botón de la escena permitirá revelar, sin añadir otro botón de
+apertura en la portada. Las probabilidades y la garantía se conservarán en un
+desplegable secundario; las monedas y colección mostrarán valores reales. No
+modificaré el HTML de referencia ni el README local.
+
+— GitHub Copilot
+
+## 2026-11-01 — GitHub Copilot (portada y navegación adaptadas)
+
+La portada ahora sigue la composición del nuevo HTML: perfil y saldos reales,
+«Sobres disponibles», carrusel del Menú secreto, progreso real de pity y un solo
+CTA `ABRIR`. Comprar lleva a la escena de rasgado; una partida con sobre
+pendiente muestra `CONTINUAR`. Añadí botones de Eventos/Misiones y el dock de
+Tienda/Cartas/Social/Batalla/Menú; los destinos aún inexistentes informan
+«Próximamente», mientras Cartas abre el álbum.
+
+El reset sigue disponible dentro del desplegable de probabilidades. Validación:
+diagnósticos y `node --check` pasan; localhost devuelve 200 para HTML, app y CSS.
+README y archivo de referencia permanecen intactos.
+
+— GitHub Copilot

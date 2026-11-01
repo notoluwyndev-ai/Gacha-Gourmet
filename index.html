@@ -15,10 +15,10 @@
   <body>
     <div class="game-shell">
       <header class="topbar">
-        <a class="brand" href="#inicio" aria-label="Gacha Gourmet, inicio" data-screen-link="packs">
-          <span class="brand-mark" aria-hidden="true">GG</span>
-          <span class="brand-lockup"><span class="brand-name">Gacha <i>Gourmet</i></span><small>CLUB DE COCINA</small></span>
-        </a>
+        <button class="profile-chip" type="button" data-action="placeholder" data-message="Perfil de chef · Próximamente">
+          <span class="profile-avatar" aria-hidden="true">✦</span><span>Chef gourmet</span>
+        </button>
+        <a class="mini-brand" href="#inicio" aria-label="Gacha Gourmet, inicio" data-screen-link="packs">G<span>G</span></a>
         <div class="player-stats">
           <div class="stat-chip coin-chip"><span aria-hidden="true">●</span><strong id="coin-count">0</strong></div>
           <div class="stat-chip album-chip"><span aria-hidden="true">▤</span><strong id="collection-count">0/0</strong></div>
@@ -30,32 +30,51 @@
         <p id="game-message" class="game-message" role="status" aria-live="polite"></p>
 
         <section class="screen" id="screen-packs" aria-labelledby="packs-title">
-          <div class="home-heading">
-            <p class="eyebrow"><span class="eyebrow-dot"></span> TEMPORADA DE SABORES</p>
-            <h1 id="packs-title">Tu próxima<br>receta favorita.</h1>
-            <p class="heading-copy">Elige un sobre y descubre quién sale de la cocina.</p>
+          <div class="home-title-row">
+            <div class="stage-title">Sobres disponibles</div>
+            <button class="highlights-button" type="button" data-action="placeholder" data-message="Cartas destacadas · Próximamente" aria-label="Cartas destacadas">✦</button>
           </div>
-
-          <section class="home-feature" aria-label="Sobre destacado">
-            <div class="feature-heading"><span>EN EL MOSTRADOR</span><span class="feature-live"><i></i> DISPONIBLE</span></div>
-            <div class="counter-layout">
-              <section id="pack-area" class="pack-area" aria-live="polite"></section>
-              <aside class="odds-panel" aria-labelledby="odds-title">
-                <p id="pity-note" class="pity-note" role="status" aria-live="polite" aria-atomic="true" hidden></p>
-                <div id="pity-progress" class="pity-progress" aria-hidden="true" hidden><span id="pity-progress-fill"></span></div>
-                <details class="odds-disclosure">
-                  <summary>
-                    <span class="odds-summary-icon" aria-hidden="true">%</span>
-                    <span><strong id="odds-title">Probabilidades</strong><small>Por carta · tasas claras</small></span>
-                    <span class="odds-chevron" aria-hidden="true">⌄</span>
-                  </summary>
-                  <p class="panel-copy">Cada carta se sortea por separado.</p>
-                  <div id="pack-odds" class="odds-list"></div>
-                  <div class="odds-footnote"><span aria-hidden="true">✳</span> Un sobre no garantiza una rareza concreta.</div>
-                </details>
-              </aside>
+          <div class="carousel">
+            <button class="arrow" type="button" data-action="placeholder" data-message="Más sobres llegarán pronto" aria-label="Sobre anterior">‹</button>
+            <div class="pack-card">
+              <span class="bubble" aria-hidden="true">1</span>
+              <span class="pack-emblem-small" aria-hidden="true">✦</span>
+              <strong class="pack-set-name">Menú secreto</strong>
+              <span class="pack-set-edition">COLECCIÓN DE TEMPORADA</span>
             </div>
-          </section>
+            <button class="arrow" type="button" data-action="placeholder" data-message="Más sobres llegarán pronto" aria-label="Sobre siguiente">›</button>
+          </div>
+          <div class="pbar-wrap">
+            <div class="pbar-label"><span>Garantía Ultra rara</span><span id="home-pity-label">0/19</span></div>
+            <div class="pbar" role="progressbar" aria-label="Progreso de garantía Ultra rara" aria-valuemin="0" aria-valuemax="19" aria-valuenow="0"><i id="home-pity-fill"></i></div>
+          </div>
+          <button class="open-btn" id="home-open-button" type="button" data-action="buy-pack">ABRIR</button>
+          <p class="open-sub" id="home-pack-sub"></p>
+
+          <div class="home-shortcuts" aria-label="Accesos rápidos">
+            <button class="fab" type="button" data-action="placeholder" data-message="Eventos · Próximamente">
+              <span class="fab-circle">✷</span><span class="fab-label">Eventos</span>
+            </button>
+            <button class="fab" type="button" data-action="placeholder" data-message="Misiones · Próximamente">
+              <span class="fab-circle">◎</span><span class="fab-label">Misiones</span>
+            </button>
+          </div>
+          <aside class="home-odds">
+            <p id="pity-note" class="pity-note" role="status" aria-live="polite" aria-atomic="true" hidden></p>
+            <div id="pity-progress" class="pity-progress" aria-hidden="true" hidden><span id="pity-progress-fill"></span></div>
+            <details class="odds-disclosure">
+              <summary><span class="odds-summary-icon" aria-hidden="true">%</span><span><strong id="odds-title">Probabilidades</strong><small>Por carta · tasas claras</small></span><span class="odds-chevron" aria-hidden="true">⌄</span></summary>
+              <p class="panel-copy">Cada carta se sortea por separado.</p>
+              <div id="pack-odds" class="odds-list"></div>
+              <div class="odds-footnote"><span aria-hidden="true">✳</span> Un sobre no garantiza una rareza concreta.</div>
+              <button class="reset-button home-reset" type="button" data-action="reset">Reiniciar partida</button>
+            </details>
+          </aside>
+        </section>
+
+        <section class="screen" id="screen-opening" aria-label="Apertura del sobre" hidden>
+          <div class="opening-topline"><button class="back-button" type="button" data-action="return-home" aria-label="Volver al inicio">‹</button><span>MENÚ SECRETO</span><span aria-hidden="true">✦</span></div>
+          <section id="pack-area" class="pack-area" aria-live="polite"></section>
         </section>
 
         <section class="screen" id="screen-album" aria-labelledby="album-title" hidden>
@@ -95,13 +114,21 @@
       </main>
 
       <nav class="bottom-dock" aria-label="Navegación principal">
-        <button class="dock-button is-active" type="button" data-screen="packs" aria-pressed="true">
-          <span class="dock-icon" aria-hidden="true">⌂</span><span>Inicio</span>
+        <button class="dock-button" type="button" data-action="placeholder" data-message="Tienda · Próximamente">
+          <span class="dock-icon" aria-hidden="true">⌂</span><span>Tienda</span>
         </button>
         <button class="dock-button" type="button" data-screen="album" aria-pressed="false">
-          <span class="dock-icon" aria-hidden="true">▤</span><span>Álbum</span>
+          <span class="dock-icon" aria-hidden="true">▤</span><span>Cartas</span>
         </button>
-        <button class="dock-reset" type="button" data-action="reset" aria-label="Reiniciar partida" title="Reiniciar partida">↻</button>
+        <button class="dock-button dock-center" type="button" data-action="placeholder" data-message="Social · Próximamente" aria-label="Social">
+          <span class="dock-icon" aria-hidden="true">✦</span>
+        </button>
+        <button class="dock-button" type="button" data-action="placeholder" data-message="Batallas · Próximamente">
+          <span class="dock-icon" aria-hidden="true">⚔</span><span>Batalla</span>
+        </button>
+        <button class="dock-button" type="button" data-action="placeholder" data-message="Menú · Próximamente">
+          <span class="dock-icon" aria-hidden="true">≡</span><span>Menú</span>
+        </button>
       </nav>
     </div>
   </body>
