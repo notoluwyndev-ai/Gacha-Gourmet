@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#183b35">
+    <title>Gacha Gourmet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@700&family=Nunito+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="data/cards.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="game-shell">
+      <header class="topbar">
+        <a class="brand" href="#sobres" aria-label="Gacha Gourmet, inicio" data-screen-link="packs">
+          <span class="brand-mark" aria-hidden="true">GG</span>
+          <span class="brand-name">Gacha <i>Gourmet</i></span>
+        </a>
+        <nav class="main-nav" aria-label="Secciones">
+          <button class="nav-button is-active" type="button" data-screen="packs" aria-pressed="true">Sobres</button>
+          <button class="nav-button" type="button" data-screen="album" aria-pressed="false">Álbum</button>
+        </nav>
+        <div class="player-stats">
+          <div class="stat-chip coin-chip"><span aria-hidden="true">●</span><strong id="coin-count">0</strong><small>MONEDAS</small></div>
+          <div class="stat-chip album-chip"><span aria-hidden="true">▤</span><strong id="collection-count">0/0</strong><small>ÁLBUM</small></div>
+        </div>
+      </header>
+
+      <main>
+        <p id="fatal-error" class="fatal-error" role="alert" hidden></p>
+        <p id="game-message" class="game-message" role="status" aria-live="polite"></p>
+
+        <section class="screen" id="screen-packs" aria-labelledby="packs-title">
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow"><span class="eyebrow-dot"></span> COLECCIÓN DE TEMPORADA</p>
+              <h1 id="packs-title">El mostrador</h1>
+              <p class="heading-copy">Un sobre caliente. Tres sorpresas recién salidas.</p>
+            </div>
+            <div class="season-stamp" aria-label="Edición menú secreto">
+              <span>EDICIÓN</span><strong>MENÚ<br>SECRETO</strong>
+            </div>
+          </div>
+
+          <div class="counter-layout">
+            <section id="pack-area" class="pack-area" aria-live="polite"></section>
+            <aside class="odds-panel" aria-labelledby="odds-title">
+              <div class="panel-title-row">
+                <h2 id="odds-title">Probabilidades</h2>
+                <span class="info-mark" title="Probabilidad independiente por carta">i</span>
+              </div>
+              <p class="panel-copy">Cada carta se sortea por separado.</p>
+              <div id="pack-odds" class="odds-list"></div>
+              <div class="odds-footnote"><span aria-hidden="true">✳</span> Sin garantía de rareza en el sobre.</div>
+              <div class="daily-special">
+                <span class="special-icon" aria-hidden="true">✦</span>
+                <div><strong>La receta del día</strong><small>Completa tu álbum a tu ritmo.</small></div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="screen" id="screen-album" aria-labelledby="album-title" hidden>
+          <div class="page-heading album-heading">
+            <div>
+              <p class="eyebrow"><span class="eyebrow-dot"></span> TU LIBRO DE RECETAS</p>
+              <h1 id="album-title">El álbum</h1>
+              <p class="heading-copy" id="album-summary"></p>
+            </div>
+            <div class="album-progress" aria-label="Progreso del álbum">
+              <span id="album-progress-label">0 %</span>
+              <div class="progress-track"><span id="album-progress-bar"></span></div>
+            </div>
+          </div>
+          <div class="album-toolbar">
+            <div class="filter-list" role="group" aria-label="Filtrar por categoría">
+              <button class="filter-button is-active" type="button" data-category="Todas" aria-pressed="true">Todas</button>
+              <button class="filter-button" type="button" data-category="Horno" aria-pressed="false">Horno</button>
+              <button class="filter-button" type="button" data-category="Nevera" aria-pressed="false">Nevera</button>
+              <button class="filter-button" type="button" data-category="Postre" aria-pressed="false">Postre</button>
+              <button class="filter-button" type="button" data-category="Fast Food" aria-pressed="false">Fast food</button>
+              <button class="filter-button" type="button" data-category="Huerta" aria-pressed="false">Huerta</button>
+              <button class="filter-button" type="button" data-category="Despensa" aria-pressed="false">Despensa</button>
+            </div>
+            <label class="owned-toggle"><input id="owned-only" type="checkbox"><span class="toggle-track"></span><span>Solo obtenidas</span></label>
+          </div>
+          <div id="album-grid" class="album-grid"></div>
+        </section>
+      </main>
+
+      <footer class="game-footer">
+        <span>GACHA GOURMET <i>·</i> PROTOTIPO DE COCINA</span>
+        <button type="button" class="reset-button" data-action="reset">Reiniciar partida</button>
+      </footer>
+    </div>
+  </body>
+</html>
