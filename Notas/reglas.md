@@ -49,12 +49,18 @@ catálogo, o también se bloquea.
   únicas) — la carta nunca se destruye ni se pierde.
 - **Bonus de monedas por duplicado:** configurado en
   `config.dupeBonus = { comun: 2, rara: 5, ultra: 10 }`. Al abrir un sobre,
-  por cada carta que ya estuviera en el inventario (cantidad > 0 antes de
-  esa tirada) se suman esas monedas, además de incrementar la cantidad como
-  siempre. Da feedback inmediato (`+N monedas por duplicados`) y hace que
-  comprar más sobres tenga sentido a largo plazo incluso tras completar el
-  álbum. No afecta al sorteo (`drawCard`/`rollRarity`/`pickFromRarity`
-  intactos) ni al pity — es puramente una recompensa económica posterior.
+  las 3 cartas se procesan una a una en orden; por cada carta cuya cantidad
+  en el inventario sea > 0 *en ese momento* (antes de sumar esa copia
+  concreta) se suman esas monedas, además de incrementar la cantidad como
+  siempre. Importante: esto es por carta individual, no por sobre — si un
+  mismo sobre saca dos copias de la misma carta, la segunda sí cuenta como
+  duplicado y da bonus, aunque el jugador no tuviera esa carta antes de abrir
+  el sobre. Es intencionado (más simple de razonar que comparar contra una
+  instantánea previa al sobre completo) y da feedback inmediato (`+N monedas
+  por duplicados`). Hace que comprar más sobres tenga sentido a largo plazo
+  incluso tras completar el álbum. No afecta al sorteo
+  (`drawCard`/`rollRarity`/`pickFromRarity` intactos) ni al pity — es
+  puramente una recompensa económica posterior.
 - Se puede desactivar quitando `config.dupeBonus` de `data/cards.js`, o
   ajustar los valores por rareza libremente; `validateCatalog()` exige que
   cada rareza con bonus exista en `config.odds` y que el valor sea un

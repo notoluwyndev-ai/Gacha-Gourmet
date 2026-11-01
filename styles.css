@@ -230,6 +230,21 @@ h1 { margin-bottom: 3px; font-family: var(--font-display); font-size: 48px; line
 .food-card.rarity-rara::before { background: #c5e0f2; }
 .food-card.rarity-ultra::before { background: #f3c6de; }
 .food-card.is-locked { background: #e8ece3; box-shadow: 3px 4px 0 #73857a; }
+.food-card.rarity-ultra:not(.is-locked)::after {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  content: "";
+  background: repeating-linear-gradient(115deg, rgb(255 255 255 / 0%) 0%, rgb(255 110 220 / 55%) 9%, rgb(110 200 255 / 55%) 18%, rgb(255 232 120 / 55%) 27%, rgb(140 255 190 / 55%) 36%, rgb(255 255 255 / 0%) 45%);
+  background-size: 260% 260%;
+  mix-blend-mode: color-dodge;
+  opacity: 0.6;
+  animation: holo-shift 4.5s ease-in-out infinite;
+}
+@keyframes holo-shift {
+  0%, 100% { background-position: 0% 20%; }
+  50% { background-position: 100% 80%; }
+}
 .food-card-header { display: flex; align-items: center; justify-content: space-between; gap: 5px; padding: 9px 10px 0; }
 .rarity-label { display: inline-flex; align-items: center; gap: 5px; color: var(--ink-soft); font-size: 8px; font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase; }
 .rarity-label .rarity-dot { width: 7px; }
