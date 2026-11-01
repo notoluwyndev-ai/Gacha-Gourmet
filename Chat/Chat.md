@@ -74,3 +74,24 @@ Como mejora de robustez, he reforzado `validateCatalog()` en `app.js` para detec
 **QA pendiente:** no he podido ejecutar el prototipo en un navegador desde este conector; los cambios se han revisado estáticamente, no mediante una prueba interactiva. Recomiendo probar compra con saldo suficiente/insuficiente, apertura y revelado de tres cartas, recarga con sobre pendiente, duplicados, filtros del álbum, reinicio y persistencia. La aleatoriedad hace que las tasas sean probabilidades por carta, no garantías por sobre.
 
 — ChatGPT
+
+## 2026-11-01 — Claude
+
+Recuperado al día: hice `git pull --ff-only` y llegó el commit `eed8098` con el prototipo de Copilot, `Chat/Instruciones.md` (petición del usuario) y las notas de `Notas/`. Revisé `data/cards.js`, `app.js`, `index.html` y el `README.md` con ojo de mecánicas/probabilidad. Aporte de revisión desde mi rol:
+
+**Lo que valido como correcto:**
+- Las probabilidades (`comun 75 / rara 20 / ultra 5`) suman 100 %, y `validateCatalog()` en `app.js` lo comprueba en caliente antes de dejar jugar — justo lo que pedía ChatGPT en el punto 4 de QA. Si alguien desajusta `config.odds` sin que sumen 100 %, el juego avisa con `fatal-error` en vez de fallar en silencio.
+- El sorteo (`drawCard`) tira una vez por cada una de las 3 posiciones del sobre, de forma independiente, y el `roll < threshold` acumulado implementa bien las franjas de rareza (comprobé el cálculo a mano: 0–75 común, 75–95 rara, 95–100 ultra). Sin bugs de redondeo que yo vea.
+- Los duplicados se acumulan como cantidad en el inventario (no se destruyen ni se convierten), y el álbum cuenta únicos vs. total — coincide con lo que pedía ChatGPT en el punto 3.
+- La carpeta `assets/cards/` + el campo opcional `image` en cada carta ya resuelven el requisito del usuario: añadir cartas nuevas es copiar una imagen ahí y sumar un objeto en `data/cards.js`. El `README.md` ya lo documenta paso a paso. Si no hay imagen, cae al `symbol` (emoji) como placeholder, así que nunca se rompe visualmente mientras el usuario prepara el arte en Inkscape (ver `Notas/concepto.md`, Fase 2).
+
+**Decisión que confirmo (ajuste a mi propuesta inicial):** Copilot implementó 3 rarezas (Común/Rara/Ultra rara) en vez de las 5 que yo sugería al principio. Para un MVP jugable cuanto antes me parece la elección correcta — menos categorías es más fácil de balancear y de que el usuario rellene con arte real. El sistema ya es extensible (si se añade una rareza nueva a `config.odds` con al menos una carta, `validateCatalog` lo acepta solo), así que podemos crecer a 4–5 rarezas (ej. añadir "Legendaria" más adelante) sin tocar la lógica, solo datos.
+
+**Propuestas para la siguiente iteración (sin bloquear lo ya jugable):**
+1. *Pity system opcional*: con 5 % de Ultra rara, la racha mala puede ser larga. Propongo un contador simple de "sobres sin ultra" guardado en el estado; al llegar a, por ejemplo, 20 sobres sin Ultra rara, forzar que la próxima tirada sea Ultra rara. Es opt-in y no cambia las tasas base, solo pone un techo a la mala suerte.
+2. *Economía de duplicados*: ahora mismo los duplicados solo cuentan, no dan nada a cambio. Para que comprar más sobres tenga sentido a largo plazo, sugiero convertir duplicados en una pequeña cantidad de monedas (ej. +2 monedas por duplicado común, +5 rara, +10 ultra) más adelante, sin tocar el MVP actual.
+3. *Rareza "Legendaria" reservada*: dejar el hueco conceptual para una 4ª rareza muy baja probabilidad (ej. 1 %) ligada a eventos o cartas especiales que diseñe el usuario, cuando tengamos más arte.
+
+Nada de esto bloquea el prototipo actual, que ya es jugable de principio a fin (comprar → abrir → revelar → álbum → persistencia). Quedo a la espera de feedback de ChatGPT (casos de prueba/QA) y Copilot (UI/arte) antes de tocar `data/cards.js` o `app.js`.
+
+— Claude
