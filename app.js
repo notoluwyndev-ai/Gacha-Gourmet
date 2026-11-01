@@ -199,8 +199,8 @@
       elements.packArea.innerHTML = `
         <div class="pending-pack">
           <div class="pack-illustration" aria-hidden="true"><div class="pack-seal"><span>✦</span><small>MENÚ</small></div></div>
-          <h2>Sobre en mano</h2>
-          <p>Ya es tuyo. ¿Listo para descubrir el menú?</p>
+          <h2>¡Tu sorpresa está lista!</h2>
+          <p>Dentro te esperan tres cartas. ¿Descubrimos qué ha tocado?</p>
           <button class="primary-button" type="button" data-action="open-pack">Romper el sello</button>
         </div>`;
       return;
@@ -214,8 +214,8 @@
       elements.packArea.innerHTML = `
         <div class="pack-complete">
           <p class="eyebrow">¡MENÚ SERVIDO!</p>
-          <h2>Recién coleccionadas</h2>
-          <p>Las cartas ya están en tu álbum.</p>
+          <h2>¡Tres cartas sobre la mesa!</h2>
+          <p>Ya puedes verlas en tu álbum. ¿Qué te ha tocado?</p>
           <div class="revealed-card-row">${summaryCards}</div>
           <div class="pack-complete-actions">
             <button class="secondary-button" type="button" data-action="finish-album">Ver álbum</button>
@@ -230,7 +230,7 @@
       <div class="reveal-stage">
         <p class="reveal-progress">Carta ${state.pack.revealed + 1} de ${state.pack.cardIds.length}</p>
         <div class="reveal-card">${cardMarkup(card, state.inventory[card.id])}</div>
-        <button class="primary-button" type="button" data-action="next-card">${state.pack.revealed === state.pack.cardIds.length - 1 ? "Terminar apertura" : "Revelar siguiente"}</button>
+        <button class="primary-button" type="button" data-action="next-card">${state.pack.revealed === state.pack.cardIds.length - 1 ? "¡Descubrir la última!" : "Revelar siguiente"}</button>
       </div>`;
   }
 
@@ -269,7 +269,7 @@
     });
     elements.albumGrid.innerHTML = visibleCards.length
       ? visibleCards.map((card) => cardMarkup(card, state.inventory[card.id] || 0, !(state.inventory[card.id] > 0))).join("")
-      : `<div class="empty-album"><strong>Aún no hay recetas aquí</strong>Prueba otra categoría o abre un sobre.</div>`;
+      : `<div class="empty-album"><strong>¡Aquí aún queda mucho por descubrir!</strong>Cambia los filtros o abre un sobre para encontrar más recetas.</div>`;
   }
 
   function applyImageFallbacks() {
