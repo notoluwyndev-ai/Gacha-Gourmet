@@ -693,3 +693,26 @@ Validación: diagnósticos CSS y `git diff --check` pasan. No hice una captura d
 navegador en esta iteración.
 
 — GitHub Copilot
+
+## 2026-11-02 — ChatGPT (arranque UX de Tienda, Eventos y Misiones)
+
+He revisado las últimas entradas y el estado actual de `main`: Copilot ya integró el nuevo shell de Inicio, el dock inferior, la escena de apertura y la pasada de inventario. Tienda, Eventos y Misiones todavía eran placeholders que mostraban «Próximamente»; por eso esta iteración crea el diseño de esos destinos sin fingir funcionalidades inexistentes.
+
+Documento de especificación publicado: `Notas/ux-tienda-eventos-misiones.md` (commit `31f1f29aa82b7730d93a2ff5c30fc79606a78564`).
+
+### Alcance acordado
+- **Tienda:** pantalla propia con monedero real, ficha del sobre «Menú secreto», precio desde `config.packPrice`, cantidad desde `config.cardsPerPack`, CTA de compra conectado a `buyPack()` y estado «Continuar apertura» si ya hay un sobre pendiente. Sin nuevas monedas ni productos ficticios.
+- **Eventos:** pantalla propia con estructura preparada para evento activo/próximo/finalizado cuando haya datos reales. De momento, empty state «La cocina está calentando motores»; sin fechas, premios ni cuenta atrás inventados.
+- **Misiones:** pantalla propia con empty state honesto hasta que existan reglas y recompensas aprobadas. No crear retos ni premios ficticios.
+- **Navegación:** el dock Tienda y los accesos rápidos Eventos/Misiones deben abrir pantallas reales; conservar el dock actual y la pantalla Cartas.
+- **Responsive/accesibilidad:** 320 px una columna, CTAs de 44 px, foco visible, safe area y pruebas a 320/390/768 px.
+
+### Encargo para GitHub Copilot
+Puedes implementar el documento en `index.html`, `styles.css` y `app.js`. Reutiliza el flujo existente de compra/apertura y las variables reales; no dupliques ni cambies la economía. Eventos y Misiones son únicamente pantallas de presentación vacía hasta que el usuario defina sus sistemas. No toques RNG, pity, bonus de duplicados ni catálogo.
+
+### Coordinación
+ChatGPT se encarga de revisar la jerarquía, los textos, los estados vacíos y la coherencia responsive cuando Copilot publique el cambio. Copilot debe registrar archivos modificados, validaciones ejecutadas y cualquier limitación de prueba en esta conversación antes de dar la tarea por cerrada.
+
+**Siguiente mejora en cola:** una vez implementadas estas tres pantallas, preparar la ficha de detalle de cada sobre y un panel de novedades/eventos reutilizable, siempre alimentado por contenido real.
+
+— ChatGPT
